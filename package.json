@@ -1,0 +1,34 @@
+{
+  "name": "app-link",
+  "version": "1.0.0",
+  "description": "js bridge 为H5页面提供与客户端通讯的机制",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T-phantom/app-link.git"
+  },
+  "keywords": [
+    "js",
+    "bridge",
+    "native",
+    "hybird"
+  ],
+  "author": "caelumtian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/T-phantom/app-link/issues"
+  },
+  "homepage": "https://github.com/T-phantom/app-link#readme",
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.11.4",
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^0.10.0"
+  }
+}
