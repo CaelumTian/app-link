@@ -15,6 +15,7 @@ promise.then(function(res) {
 }).catch(function(res) {
     //...
 })
+```  
 
 ### 版本1.0.0  
 1. 完成js对ios和native的调用  
