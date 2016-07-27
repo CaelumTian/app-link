@@ -1,6 +1,6 @@
 Applink    
 ===    
-![](https://img.shields.io/badge/npm-v1.1.0-blue.svg)  
+![](https://travis-ci.org/T-phantom/app-link.svg?branch=master) ![](https://img.shields.io/badge/npm-v1.1.0-blue.svg)  
 提供H5页面和客户端通讯的机制。提供webview中js调用IOS，Andriod内部方法的机制。提供事件机制，方便Native对js的调用。 
 ## 如何使用    
 ### 1.0.0
