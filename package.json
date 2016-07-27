@@ -1,6 +1,6 @@
 {
   "name": "app-link",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "js bridge 为H5页面提供与客户端通讯的机制",
   "main": "index.js",
   "scripts": {
@@ -26,9 +26,10 @@
     "babel-cli": "^6.11.4",
     "babel-core": "^6.11.4",
     "chai": "^3.5.0",
-    "mocha": "^2.5.3",
     "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2",
     "gulp-jshint": "^1.11.2",
-    "gulp-load-plugins": "^0.10.0"
+    "gulp-load-plugins": "^0.10.0",
+    "mocha": "^2.5.3"
   }
 }

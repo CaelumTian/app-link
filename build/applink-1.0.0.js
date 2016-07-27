@@ -1,10 +1,14 @@
-;(function(win) {
+"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+;(function (win) {
     //基础参数
     var doc = win.document,
         ua = win.navigator.userAgent,
-        isWin = (/Windows\sPhone\s(?:OS\s)?[\d\.]+/i).test(ua) || (/Windows\sNT\s[\d\.]+/i).test(ua),
-        isIOS = (/iPhone|iPad|iPod/i).test(ua),
-        isAndroid = (/Android/i).test(ua);
+        isWin = /Windows\sPhone\s(?:OS\s)?[\d\.]+/i.test(ua) || /Windows\sNT\s[\d\.]+/i.test(ua),
+        isIOS = /iPhone|iPad|iPod/i.test(ua),
+        isAndroid = /Android/i.test(ua);
 
     //重要内容
     var uuid = 1,
@@ -30,12 +34,12 @@
          * @param fail    失败回调函数
          * @param {Number} timeout 超时时间
          */
-        invoke: function(objName, method, params, success, fail, timeout) {
+        invoke: function invoke(objName, method, params, success, fail, timeout) {
             var uuid;
             var deferred;
             var self = this;
 
-            if(typeof arguments[arguments.length - 1] === "number") {
+            if (typeof arguments[arguments.length - 1] === "number") {
                 timeout = arguments[arguments.length - 1];
             }
             if (typeof success !== 'function') {
@@ -44,19 +48,19 @@
             if (typeof fail !== 'function') {
                 fail = null;
             }
-            if(Promise) {
+            if (Promise) {
                 deferred = {};
-                deferred.promise = new Promise(function(resolve, reject) {
+                deferred.promise = new Promise(function (resolve, reject) {
                     deferred.resolve = resolve;
                     deferred.reject = reject;
                 });
             }
             //超时设定
-            if(timeout > 0) {
-                uuid = setTimeout(function() {
-                    self._onComplete(uuid, {res: "native响应超时"}, "fail");
+            if (timeout > 0) {
+                uuid = setTimeout(function () {
+                    self._onComplete(uuid, { res: "native响应超时" }, "fail");
                 }, timeout);
-            }else {
+            } else {
                 uuid = this._getUuid();
             }
             this._registerCall(uuid, success, fail, deferred);
@@ -64,16 +68,16 @@
             this._postMessage(objName, method, params, uuid);
 
             console.log(deferred);
-            if(deferred) {
+            if (deferred) {
                 return deferred.promise;
             }
         },
 
         //给客户端的成功与失败回掉
-        onSuccess: function(uuid, data) {
+        onSuccess: function onSuccess(uuid, data) {
             this._onComplete(uuid, data, 'success');
         },
-        onFail: function(uuid, data) {
+        onFail: function onFail(uuid, data) {
             this._onComplete(uuid, data, 'fail');
         },
         /**
@@ -83,7 +87,7 @@
          * @param type
          * @private
          */
-        _onComplete: function(uuid, data, type) {
+        _onComplete: function _onComplete(uuid, data, type) {
             clearTimeout(uuid);
             //最后的数据
             var result;
@@ -94,25 +98,25 @@
                 fail = call.fail,
                 deferred = call.deferred;
             //对data解析成string
-            if(data && typeof data === "string") {
+            if (data && typeof data === "string") {
                 try {
                     result = JSON.parse(data);
-                }catch(e) {
+                } catch (e) {
                     console.log("Native返回的JSON格式有问题");
                 }
-            }else {
+            } else {
                 result = data || {};
             }
 
-            if(type === "success") {
+            if (type === "success") {
                 success && success(result);
                 deferred && deferred.resolve(result);
-            }else if (type === 'failure') {
+            } else if (type === 'failure') {
                 fail && fail(result);
                 deferred && deferred.reject(result);
             }
             //IOS下回收iframe
-            if(isIOS) {
+            if (isIOS) {
                 this._recoverIframe(uuid);
             }
         },
@@ -120,33 +124,33 @@
          * 回收IOS使用的Iframe
          * @private
          */
-        _recoverIframe: function(uuid) {
+        _recoverIframe: function _recoverIframe(uuid) {
             var iframeId = IFRAME_PRE + uuid;
             var iframe = doc.querySelector('#' + iframeId);
-            if(iframePool.length >= iframeLimit) {
+            if (iframePool.length >= iframeLimit) {
                 doc.body.removeChild(iframe);
-            }else {
+            } else {
                 iframePool.push(iframe);
             }
         },
-        _postMessage: function(objName, method, params, uuid) {
-            if(params && typeof params === "object") {
+        _postMessage: function _postMessage(objName, method, params, uuid) {
+            if (params && (typeof params === "undefined" ? "undefined" : _typeof(params)) === "object") {
                 params = JSON.stringify(params);
-            }else {
+            } else {
                 params = "";
             }
-            if(isWin) {
-                this._onComplete(uuid, {res: "windows环境下,或者设备不支持"}, "fail");
-            }else {
+            if (isWin) {
+                this._onComplete(uuid, { res: "windows环境下,或者设备不支持" }, "fail");
+            } else {
                 //协议格式
                 var uri = PROTOCOL_NAME + "://" + objName + ":" + uuid + "/" + method + "?" + params;
-                if(isIOS) {
+                if (isIOS) {
                     this._useIframe(uuid, uri);
-                }else if(isAndroid) {
+                } else if (isAndroid) {
                     var value = PROTOCOL_NAME + ":";
                     win.prompt(uri, value);
-                }else {
-                    this._onComplete(uuid, {res: "jsbridge并不在支持的设备中"}, "fail");
+                } else {
+                    this._onComplete(uuid, { res: "jsbridge并不在支持的设备中" }, "fail");
                 }
             }
         },
@@ -156,27 +160,27 @@
          * @param url
          * @private
          */
-        _useIframe: function(uuid, url) {
+        _useIframe: function _useIframe(uuid, url) {
             var iframeId = IFRAME_PRE + uuid;
             var iframe = iframePool.pop();
-            if(!iframe) {
+            if (!iframe) {
                 iframe = doc.createElement("iframe");
                 iframe.setAttribute('frameborder', '0');
                 iframe.style.cssText = 'width:0;height:0;border:0;display:none;';
             }
             iframe.setAttribute("id", iframeId);
             iframe.setAttribute("src", url);
-            if(!iframe.parentNode) {
-                setTimeout(function() {
+            if (!iframe.parentNode) {
+                setTimeout(function () {
                     doc.body.appendChild(iframe);
                 }, 10);
             }
         },
-        _registerGC: function(uuid, timeout) {
+        _registerGC: function _registerGC(uuid, timeout) {
             var self = this;
             var gc_time = Math.max(timeout || 0, GC_TIME);
 
-            setTimeout(function() {
+            setTimeout(function () {
                 self._cancelRegisterCall(uuid);
             }, gc_time);
         },
@@ -185,20 +189,20 @@
          * @param uuid
          * @private
          */
-        _cancelRegisterCall: function(uuid) {
+        _cancelRegisterCall: function _cancelRegisterCall(uuid) {
             var sucId = SUCCESS_PRE + uuid,
                 failId = FAILURE_PRE + uuid,
                 defId = DEFERRED_PRE + uuid;
             var result = {};
-            if(this.funcs[sucId]) {
+            if (this.funcs[sucId]) {
                 result.success = this.funcs[sucId];
                 delete this.funcs[sucId];
             }
-            if(this.funcs[failId]) {
+            if (this.funcs[failId]) {
                 result.fail = this.funcs[failId];
                 delete this.funcs[failId];
             }
-            if(this.funcs[defId]) {
+            if (this.funcs[defId]) {
                 result.deferred = this.funcs[defId];
                 delete this.funcs[defId];
             }
@@ -212,14 +216,14 @@
          * @param deferred
          * @private
          */
-        _registerCall: function(uuid, success, fail, deferred) {
-            if(success) {
+        _registerCall: function _registerCall(uuid, success, fail, deferred) {
+            if (success) {
                 this.funcs[SUCCESS_PRE + uuid] = success;
             }
-            if(fail) {
+            if (fail) {
                 this.funcs[FAILURE_PRE + uuid] = fail;
             }
-            if(deferred) {
+            if (deferred) {
                 this.funcs[DEFERRED_PRE + uuid] = deferred;
             }
         },
@@ -228,11 +232,11 @@
          * @returns {string}
          * @private
          */
-        _getUuid: function() {
+        _getUuid: function _getUuid() {
             return Math.floor(Math.random() * (1 << 50)) + '' + uuid++;
         }
     };
-    if(!window.Applink) {
+    if (!window.Applink) {
         window.Applink = Applink;
     }
 })(window);
