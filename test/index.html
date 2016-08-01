@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/mocha/3.0.0-2/mocha.css" rel="stylesheet">
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="//cdn.bootcss.com/mocha/3.0.0-2/mocha.js"></script>
+    <script src="//cdn.bootcss.com/chai/3.5.0/chai.js"></script>
+    <script src="../build/applink-1.0.0.js"></script>
+    <script>
+        var ua = window.navigator.userAgent;
+        var isIOS = /iPhone|iPad|iPod/i.test(ua),
+                isAndroid = /Android/i.test(ua);
+        mocha.setup('bdd');
+        chai.should();
+        var expect = chai.expect;
+        describe("Applink 单元测试", function() {
+            let promise = Applink.invoke("class", "method", {});
+            it("Applink单例检测", function() {
+                expect(Applink).to.be.an('object');
+            });
+            it("Promise异步支持测试", function() {
+                expect(promise).to.be.an.instanceof(window.Promise);
+            });
+            it("uuid生成测试", function() {
+                expect(parseInt(Applink._getUuid().slice(-1))).to.be.equal(parseInt(Applink._getUuid().slice(-1)) - 1);
+            });
+            it("funcs回调缓存生成测试", function() {
+                var count = 0;
+                Applink.invoke("class2", "method", {});
+                Applink.invoke("class3", "method", {});
+                for(var key in Applink.funcs) {
+                    if(Applink.funcs.hasOwnProperty(key)) {
+                        count++;
+                    }
+                }
+                if(!isIOS && !isAndroid) {
+                    expect(count).to.be.equal(0);
+                }else {
+                    expect(count).to.be.equal(3);
+                }
+            })
+        });
+        mocha.run();
+    </script>
+</body>
+</html>
