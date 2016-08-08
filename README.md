@@ -50,5 +50,4 @@ promise.then(function(res) {
 
 ### 待更新问题  
 1. 添加对UA的更多侦测，假如指定的UA
-2. 添加单测内容  
 3. 添加hybird.js的封装

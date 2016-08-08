@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/mocha/3.0.0-2/mocha.css" rel="stylesheet">
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="//cdn.bootcss.com/mocha/3.0.0-2/mocha.js"></script>
+    <script src="//cdn.bootcss.com/chai/3.5.0/chai.js"></script>
+    <script src="../build/applink-1.1.0.js"></script>
+    <script>
+        var ua = window.navigator.userAgent;
+        var isIOS = /iPhone|iPad|iPod/i.test(ua),
+                isAndroid = /Android/i.test(ua);
+        mocha.setup('bdd');
+        chai.should();
+        var expect = chai.expect;
+        describe("Applink-1.1.0 单元测试", function() {
+            let jsbridge = new Applink();
+            it("Applink类单例测试", function() {
+                let jsbridge2 = new Applink();
+                expect(jsbridge).to.be.equal(jsbridge2);
+            })
+        });
+        mocha.run();
+    </script>
+</body>
+</html>

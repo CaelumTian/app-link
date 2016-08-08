@@ -17,7 +17,7 @@
         mocha.setup('bdd');
         chai.should();
         var expect = chai.expect;
-        describe("Applink 单元测试", function() {
+        describe("Applink-1.0.0 单元测试", function() {
             let promise = Applink.invoke("class", "method", {});
             it("Applink单例检测", function() {
                 expect(Applink).to.be.an('object');
