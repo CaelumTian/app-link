@@ -21,6 +21,9 @@
   "bugs": {
     "url": "https://github.com/T-phantom/app-link/issues"
   },
+  "scripts": {
+    "test": "babel lib --out-dir build"
+  },
   "homepage": "https://github.com/T-phantom/app-link#readme",
   "devDependencies": {
     "babel-cli": "^6.11.4",
