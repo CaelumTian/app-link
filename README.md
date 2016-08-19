@@ -22,7 +22,7 @@ document.addEventListener('eventName', function(data) {
 	// 这里要注意，Native 传递过来的事件参数是在 data 的 param 属性中。
 	alert(data.param);
 }, false);
-```  
+```    
 ### 支持Promise    
 在不支持Promise的时候，返回值为空
 ```javascript  
@@ -32,7 +32,25 @@ promise.then(function(res) {
 }).catch(function(res) {
     //...
 })
-```  
+```    
+
+## 对外提供的接口  
+### applink.fireEvent   
+触发H5页面指定事件  
+参数：  
+* @param eventname {String} 事件名
+* @param eventdata {String} 参数  
+
+### applink.setParam   
+IOS下设置过多的额外参数  
+参数：
+* @param uuid  
+* @param params {String} 参数字符串  
+
+### applink.getParam  
+获得IOS的参数设置  
+参数：
+* @param uuid
 
 ## changelog   
 ### 1.0.0  
@@ -46,8 +64,11 @@ promise.then(function(res) {
 4. 优化显示内容  
 
 ### 1.1.1  
-1. 添加单元测试
+1. 添加单元测试  
+
+### 1.1.2  
+1. 添加param和chunk可以额外存储参数，解决安卓端和ios上回调参数过过长而导致丢失。
 
 ### 待更新问题  
 1. 添加对UA的更多侦测，假如指定的UA
-3. 添加hybird.js的封装
+3. 添加hybird.js的封装    
